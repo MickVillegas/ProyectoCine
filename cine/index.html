@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas de Asientos</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="pelicula-contenedor">
+        <label>Elige una película:</label>
+        <select id="pelicula" onchange="cambio()">
+            <option value="10">Los vengadores (10€)</option>
+            <option value="12">Joker (12€)</option>
+            <option value="6">Toy Story (6€)</option>
+            <option value="7">El rey león (7€)</option>
+        </select>
+        <ul class="mostrador">
+            <li>
+                <div class="asiento"></div>
+                <small>Libre</small>
+            </li>
+            <li>
+                <div class="asiento seleccionado"></div>
+                <small>Seleccionado</small>
+            </li>
+            <li>
+                <div class="asiento ocupado"></div>
+                <small>Ocupado</small>
+            </li>
+        </ul>
+        <div class="contenedor">
+            <div class="pantalla"></div>
+            <div class="fila">
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+            </div>
+            <div class="fila">
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+            </div>
+            <div class="fila">
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+            </div>
+            <div class="fila">
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento ocupado"></div>
+                <div class="asiento ocupado"></div>
+                <div class="asiento ocupado"></div>
+                <div class="asiento ocupado"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+            </div>
+            <div class="fila">
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+            </div>
+            <div class="fila">
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+                <div class="asiento"></div>
+            </div>
+        </div>
+    </div>
+
+    <p class="texto">Has seleccionado <span id="numero">0</span> asientos por un precio total de <span id="total">100</span> euros.</p>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+<script>
+
+let arr = [];
+let peliselecionada = [];
+
+sessionStorage.setItem("lastname", "otracosa");
+let personName = sessionStorage.getItem("lastname");
+console.log(personName)
+
+    let precioTotal = document.getElementById("total")
+    let numeroAsientos = document.getElementById("numero");
+    let filasAsientos = document.getElementsByClassName("fila");
+    let peliculaSEleccionada = document.getElementById("pelicula");
+
+    let asSelec = 0;
+    let precio = 0;
+
+    function getAsientos(){
+        return asSelec
+    }
+
+    function sumarAsiento(){
+        asSelec = asSelec + 1;
+    }
+
+    function restarAsiento(){
+        asSelec = asSelec - 1;
+    }
+
+    function getPrecio(){
+        return precio
+    }
+
+    function sumarPrecio(x){
+        precio = precio + parseInt(x)
+    }
+
+    function restarPrecio(x){
+        precio = precio - parseInt(x)
+    }
+
+    for(let i = 0; i < filasAsientos.length; i++){
+        filasAsientos[i].addEventListener("click", hazCosas)
+    }
+
+
+    function hazCosas(e){
+        let nodoClick;
+        if(e){
+            nodoClick = e.target;
+            console.log(nodoClick.attributes)
+            console.log(nodoClick.className)
+
+            if(nodoClick.className == "asiento"){
+                let selecionado = peliculaSEleccionada.value
+                nodoClick.className = "asiento seleccionado";
+                sumarAsiento();
+                numeroAsientos.textContent = getAsientos();
+                sumarPrecio(selecionado);
+                precioTotal.textContent = getPrecio() 
+            }
+            else if(nodoClick.className == "asiento seleccionado"){
+                let selecionado = peliculaSEleccionada.value
+                nodoClick.className = "asiento";
+                restarAsiento()
+                numeroAsientos.textContent = getAsientos();
+                restarPrecio(selecionado);
+                precioTotal.textContent = getPrecio() 
+            }
+
+            else if(nodoClick.className = "asiento ocupado"){
+                alert("No se puede quitar asientos ocupados")
+            }
+        }
+    }
+
+function cambio(){
+    arr.push(numeroAsientos.textContent)
+    peliselecionada.push(peliculaSEleccionada.textContent)
+    sessionStorage.setItem("numeroAsientos", arr);
+    sessionStorage.setItem("pelicula", peliselecionada);
+}
+
+</script>
+
+<!-- 
+    const asientos = document.querySelectorAll(".fila .asiento:not(.ocupado)");
+    let asientosSeleccionados = document.querySelectorAll(".fila .asiento.seleccionado"); 
+-->

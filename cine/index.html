@@ -9,7 +9,7 @@
 <body>
     <div class="pelicula-contenedor">
         <label>Elige una película:</label>
-        <select id="pelicula" onchange="cambio()">
+        <select id="pelicula" onchange="cambiarOpcion()">
             <option value="10">Los vengadores (10€)</option>
             <option value="12">Joker (12€)</option>
             <option value="6">Toy Story (6€)</option>
@@ -102,8 +102,14 @@
 
 <script>
 
+
 let arr = [];
 let peliselecionada = [];
+let venga = [];
+let jocker = [];
+let toy = [];
+let rey = [];
+
 
 sessionStorage.setItem("lastname", "otracosa");
 let personName = sessionStorage.getItem("lastname");
@@ -116,6 +122,32 @@ console.log(personName)
 
     let asSelec = 0;
     let precio = 0;
+
+
+function verAsi(){
+    let a = document.getElementsByClassName("fila");
+
+    for(let x = 0; x < a.length; x++){
+        console.log("Fila " + x)
+        let hijo = a[x].firstElementChild
+        while ( hijo != null){
+            if(hijo.className == "asiento"){
+                venga.push(0);
+            }
+            else if(hijo.className == "asiento ocupado"){
+                venga.push(2);
+            }
+            else{
+                venga.push(1);
+            }
+    	    //console.log("El contenido del hijo es: "  + hijo.className);
+    	    hijo = hijo.nextElementSibling;
+	    }
+    }
+    console.log(venga);
+}
+
+verAsi()
 
     function getAsientos(){
         return asSelec
@@ -176,12 +208,31 @@ console.log(personName)
         }
     }
 
-function cambio(){
-    arr.push(numeroAsientos.textContent)
-    peliselecionada.push(peliculaSEleccionada.textContent)
-    sessionStorage.setItem("numeroAsientos", arr);
-    sessionStorage.setItem("pelicula", peliselecionada);
-}
+    function cambiarOpcion(){
+        let selecionado = peliculaSEleccionada.options[peliculaSEleccionada.selectedIndex].text;
+        switch(selecionado){
+            case "Los vengadores (10€)":
+            sessionStorage.setItem("vengadores", 2);
+            break;
+            case "Joker (12€)":
+            sessionStorage.setItem("jocker", 2);
+            break;
+            case "Toy Story (6€)":
+            sessionStorage.setItem("toyStory", 2);
+            break;
+            case "El rey león (7€)":
+            sessionStorage.setItem("reyLeon", 2);
+            break;
+        }
+    }
+
+
+window.onload = (event) => {
+    sessionStorage.setItem("vengadores", 1);
+    sessionStorage.setItem("jocker", 1);
+    sessionStorage.setItem("toyStory", 1);
+    sessionStorage.setItem("reyLeon", 1);
+};
 
 </script>
 

@@ -122,32 +122,63 @@ console.log(personName)
 
     let asSelec = 0;
     let precio = 0;
+    let selecionadoo;
 
-
-function verAsi(){
+function guardarAsientos(arra){
     let a = document.getElementsByClassName("fila");
 
     for(let x = 0; x < a.length; x++){
-        console.log("Fila " + x)
         let hijo = a[x].firstElementChild
         while ( hijo != null){
             if(hijo.className == "asiento"){
-                venga.push(0);
+                arra.push(0);
             }
             else if(hijo.className == "asiento ocupado"){
-                venga.push(2);
+                arra.push(2);
             }
             else{
-                venga.push(1);
+                arra.push(1);
             }
-    	    //console.log("El contenido del hijo es: "  + hijo.className);
     	    hijo = hijo.nextElementSibling;
 	    }
     }
-    console.log(venga);
+   // console.log(arr);
 }
 
-verAsi()
+function cargarAsiento(arr){
+    let a = document.getElementsByClassName("fila");
+    
+    let y = 0;
+    if(arr.indexOf(1) != -1 && arr.indexOf(0) != -1 && arr.indexOf(2) != -1){
+        //console.log("hola")
+    
+        for(let x = 0; x < a.length; x++){
+        let hijo = a[x].firstElementChild
+            while ( hijo != null){
+                if(arr[y] == 0){
+                    hijo.className = "asiento"
+                }
+                else if(arr[y] == 2){
+                    hijo.className = "asiento ocupado"
+                }
+                else{
+                    hijo.className == "asiento seleccionado"
+                }
+                y++;
+                hijo = hijo.nextElementSibling;
+            }
+        }
+    }
+    console.log(arr)
+}
+
+//verAsi()
+
+function darPeli(){
+    setTimeout(() => {
+            selecionadoo = peliculaSEleccionada.options[peliculaSEleccionada.selectedIndex].text;}, 100);
+            return selecionadoo;
+}
 
     function getAsientos(){
         return asSelec
@@ -182,9 +213,6 @@ verAsi()
         let nodoClick;
         if(e){
             nodoClick = e.target;
-            console.log(nodoClick.attributes)
-            console.log(nodoClick.className)
-
             if(nodoClick.className == "asiento"){
                 let selecionado = peliculaSEleccionada.value
                 nodoClick.className = "asiento seleccionado";
@@ -209,29 +237,42 @@ verAsi()
     }
 
     function cambiarOpcion(){
-        let selecionado = peliculaSEleccionada.options[peliculaSEleccionada.selectedIndex].text;
-        switch(selecionado){
+        darPeli();
+        switch(selecionadoo){
             case "Los vengadores (10€)":
-            sessionStorage.setItem("vengadores", 2);
+           // cargarAsiento(venga)
+            let item = sessionStorage.getItem("vengadores")
+            console.log(item)
+            guardarAsientos(venga);
+            sessionStorage.setItem("vengadores", venga);
             break;
             case "Joker (12€)":
-            sessionStorage.setItem("jocker", 2);
+            //cargarAsiento(jocker)
+            let item2 = sessionStorage.getItem("jocker")
+            console.log(item2)
+            guardarAsientos(jocker)
+            sessionStorage.setItem("jocker", jocker);
             break;
             case "Toy Story (6€)":
-            sessionStorage.setItem("toyStory", 2);
+            cargarAsiento(toy)
+            guardarAsientos(toy)
+            sessionStorage.setItem("toyStory", toy);
             break;
             case "El rey león (7€)":
-            sessionStorage.setItem("reyLeon", 2);
+            cargarAsiento(rey)
+            guardarAsientos(rey)
+            sessionStorage.setItem("reyLeon", rey);
             break;
         }
     }
 
 
 window.onload = (event) => {
-    sessionStorage.setItem("vengadores", 1);
-    sessionStorage.setItem("jocker", 1);
-    sessionStorage.setItem("toyStory", 1);
-    sessionStorage.setItem("reyLeon", 1);
+    darPeli();
+    sessionStorage.setItem("vengadores", venga);
+    sessionStorage.setItem("jocker", jocker);
+    sessionStorage.setItem("toyStory", toy);
+    sessionStorage.setItem("reyLeon", rey);
 };
 
 </script>

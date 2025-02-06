@@ -95,7 +95,6 @@
     </div>
 
     <p class="texto">Has seleccionado <span id="numero">0</span> asientos por un precio total de <span id="total">100</span> euros.</p>
-
     <script src="app.js"></script>
 </body>
 </html>
@@ -145,32 +144,42 @@ function guardarAsientos(arra){
    // console.log(arr);
 }
 
+function borrarOpciones(){
+    let a = document.querySelectorAll(".fila > div");
+
+for(let x = 0; x < a.length; x++){
+    if(a[x].className != "asiento ocupado"){
+        a[x].className = "asiento"
+    }
+}
+}
+
 function cargarAsiento(arr){
-    let a = document.getElementsByClassName("fila");
+    let a = document.querySelectorAll(".fila > div");
     
-    let y = 0;
     if(arr.indexOf(1) != -1 && arr.indexOf(0) != -1 && arr.indexOf(2) != -1){
         //console.log("hola")
     
         for(let x = 0; x < a.length; x++){
-        let hijo = a[x].firstElementChild
-            while ( hijo != null){
-                if(arr[y] == 0){
-                    hijo.className = "asiento"
+                if(arr[x] == 0){
+                    a[x].className = "asiento"
+                    console.log("DEBERIA SER asiento")
+                    console.log(a.className)
                 }
-                else if(arr[y] == 2){
-                    hijo.className = "asiento ocupado"
+                else if(arr[x] == 2){
+                    a[x].className = "asiento ocupado"
+                    console.log("DEBERIA SER asiento ocupado")
+                    console.log(a.className)
                 }
                 else{
-                    hijo.className == "asiento seleccionado"
+                    a[x].className = "asiento seleccionado"
+                    console.log("DEBERIA SER asiento seleccionado")
+                    console.log(a.className)
                 }
-                y++;
-                hijo = hijo.nextElementSibling;
+                console.log(arr[x])
             }
         }
     }
-    console.log(arr)
-}
 
 //verAsi()
 
@@ -184,6 +193,10 @@ function darPeli(){
         return asSelec
     }
 
+    function setAsientos(x){
+        asSelec = x;
+    }
+
     function sumarAsiento(){
         asSelec = asSelec + 1;
     }
@@ -194,6 +207,10 @@ function darPeli(){
 
     function getPrecio(){
         return precio
+    }
+
+    function setPrecio(x){
+        precio = x
     }
 
     function sumarPrecio(x){
@@ -236,8 +253,49 @@ function darPeli(){
         }
     }
 
-    function cambiarOpcion(){
-        darPeli();
+function asientoCargar(){
+    setPrecio(0);
+    setAsientos(0)
+    let selectedOption = peliculaSEleccionada.options[peliculaSEleccionada.selectedIndex].text
+        let item;
+        console.log("Pelicula seleccionada: " + selectedOption);
+        console.log("Asientos de " + selectedOption);
+        switch(selectedOption){
+            case "Los vengadores (10€)":
+           // cargarAsiento(venga)
+            item = sessionStorage.getItem("vengadores")
+            console.log(item)
+            cargarAsiento(venga)
+            precioTotal.textContent = sessionStorage.getItem("precioVen")
+            numeroAsientos.textContent = sessionStorage.getItem("asientoVen")
+            break;
+            case "Joker (12€)":
+            //cargarAsiento(jocker)
+            item = sessionStorage.getItem("jocker")
+            console.log(item)
+            cargarAsiento(jocker)
+            precioTotal.textContent = sessionStorage.getItem("precioJok")
+            numeroAsientos.textContent = sessionStorage.getItem("asientoJok")
+            break;
+            case "Toy Story (6€)":
+            item = sessionStorage.getItem("toyStory")
+            console.log(item)
+            cargarAsiento(toy)
+            precioTotal.textContent = sessionStorage.getItem("precioToy")
+            numeroAsientos.textContent = sessionStorage.getItem("asientosToy")
+            break;
+            case "El rey león (7€)":
+            item = sessionStorage.getItem("reyLeon")
+            console.log(item)
+            cargarAsiento(rey)
+            precioTotal.textContent = sessionStorage.getItem("precioRey")
+            numeroAsientos.textContent = sessionStorage.getItem("asientoRey")
+            break;
+        }
+}
+
+function asientoGuardar(){
+    darPeli();
         switch(selecionadoo){
             case "Los vengadores (10€)":
            // cargarAsiento(venga)
@@ -245,6 +303,8 @@ function darPeli(){
             console.log(item)
             guardarAsientos(venga);
             sessionStorage.setItem("vengadores", venga);
+            sessionStorage.setItem("precioVen", getPrecio())
+            sessionStorage.setItem("asientoVen", getAsientos())
             break;
             case "Joker (12€)":
             //cargarAsiento(jocker)
@@ -252,18 +312,31 @@ function darPeli(){
             console.log(item2)
             guardarAsientos(jocker)
             sessionStorage.setItem("jocker", jocker);
+            sessionStorage.setItem("precioJok", getPrecio())
+            sessionStorage.setItem("asientoJok", getAsientos())
             break;
             case "Toy Story (6€)":
             cargarAsiento(toy)
             guardarAsientos(toy)
             sessionStorage.setItem("toyStory", toy);
+            sessionStorage.setItem("precioToy", getPrecio())
+            sessionStorage.setItem("asientosToy", getAsientos())
             break;
             case "El rey león (7€)":
             cargarAsiento(rey)
             guardarAsientos(rey)
             sessionStorage.setItem("reyLeon", rey);
+            sessionStorage.setItem("precioRey", getPrecio())
+            sessionStorage.setItem("asientoRey", getAsientos())
             break;
         }
+        borrarOpciones();
+}
+
+
+    function cambiarOpcion(){
+        asientoGuardar()
+        asientoCargar()
     }
 
 
@@ -273,6 +346,7 @@ window.onload = (event) => {
     sessionStorage.setItem("jocker", jocker);
     sessionStorage.setItem("toyStory", toy);
     sessionStorage.setItem("reyLeon", rey);
+    precioTotal.textContent = "0"
 };
 
 </script>
